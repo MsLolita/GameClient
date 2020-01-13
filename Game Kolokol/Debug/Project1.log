@@ -1,0 +1,15 @@
+﻿  Source.cpp
+E:\2Game header\main_header\Project1\Player.h(27,21): warning C4018: '<': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Team_part.h(14,21): warning C4018: '<': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Team_part.h(19,14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\2Game header\main_header\Project1\Session.h(7,17): warning C4584: 'Session': base-class 'Hero' is already a base-class of 'Team_part'
+E:\2Game header\main_header\Project1\Hero.h(7): message : see declaration of 'Hero'
+E:\2Game header\main_header\Project1\Team_part.h(7): message : see declaration of 'Team_part'
+E:\2Game header\main_header\Project1\Player_Manager.h(17,21): warning C4018: '<=': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Player_Manager.h(40,20): warning C4018: '>': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Player_Manager.h(82,10): warning C4018: '>': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Hero_Manager.h(12,21): warning C4018: '<': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Hero_Manager.h(37,21): warning C4018: '<=': signed/unsigned mismatch
+E:\2Game header\main_header\Project1\Hero_Manager.h(56,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\2Game header\main_header\Project1\Source.cpp(68,18): warning C4018: '>': signed/unsigned mismatch
+  Project1.vcxproj -> E:\2Game header\main_header\Debug\Project1.exe
