@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 
 using namespace std;
@@ -13,9 +14,7 @@ int o = 10;
 string j;
 class Player_Manager;
 
-vector<string>	vPlayer = { "kek", "no", "hub", "glu", "rom", "qqq", "mik", "opp", "fox", "ten" };
 
-vector <int> Rank = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
 
 class Player  {
 	friend class Player_Manager;
@@ -23,6 +22,15 @@ private:
 
 public:
 	
+	vector<string>	vPlayer = { "kek", "no", "hub", "glu", "rom", "qqq", "mik", "opp", "fox", "ten" };
+    
+
+	vector <int> Rank = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
+
+
+	string Player;
+	int rank;
+
 	void infoPlayer() {
 
 		cout << "Your id is " << id << endl;
@@ -64,19 +72,23 @@ public:
 };
 
 
+vector<string> vHero = { "mag", "luchnik", "bomber", "loser", "pitardomen", "luntik", "batman", "poseidon", "programissst", "kekster" };
 
+vector<int> HP = { 110, 120, 125, 90, 95, 70, 250, 100, 90, 130 };
+vector<int> damage = { 12,20,7,16,20,13,20,18,19,10 };
 
 class Hero {
 public:
 
+	vector<string> vHero = { "mag", "luchnik", "bomber", "loser", "pitardomen", "luntik", "batman", "poseidon", "programissst", "kekster" };
 
-	vector<string> vHero = { "mag", "luchnik", "bomber", "loser", "pitardomen", "luntik", "batman", "poseidon", "programissst", "kekster" }; 
-	
-	vector<int> HP = { 100, 120, 125, 90, 95, 70, 250, 100, 90, 130 };
-	vector<int> damage = {15,20,7,16,25,13,24,18,19,10 };
+	vector<int> HP = { 110, 120, 125, 90, 95, 70, 250, 100, 90, 130 };
+	vector<int> damage = { 12,20,7,16,20,13,20,18,19,10 };
+
+	string Hero;
+	int hp;
+	int Hdamage;
 	vector<int> speed = { 6,5,3,6,2,7,5,9,7,10 };
-
-	
 
 };
 
@@ -98,19 +110,29 @@ public:
 	int red_HP, red_damage;
 	int  blue_HP, blue_damage;
 	
+	int red_rank_between[5];
+	int blue_rank_between[10];
+
+	int max_rank;
+	int min_rank;
 
 
-	bool winner;
+	int a,win = 0;
+
+	bool winner_team = 0;
+	
 
 	void team_separate() {
 		
 		vector<int> rand(vPlayer.size());
-		
+	byrank_badteams:
+
 		for (int i = 0; i < vPlayer.size() ; i++) {
-			rand[i] = i;
-			
+			rand[i] = i;			
 		}
-		byrank_badteams:
+		win = a = 0;
+		red_rank = blue_rank = 0;
+
 		srand((time(0)));
 		random_shuffle(rand.begin(), rand.end());
 		
@@ -120,16 +142,59 @@ public:
 			red_rank += Rank[rand[i]];
 			plus_red_rank[i] = rand[i];
 
+			red_rank_between[i] = Rank[rand[i]];
+		}
+		/////
+
+		for (int i = 0;i < 5; i++) {
+			if (a < 1)
+			{
+				max_rank = red_rank_between[i];
+				min_rank = red_rank_between[i];
+				a++;
+			}
+			if (max_rank < red_rank_between[i])
+				max_rank = red_rank_between[i];
+			if (min_rank > red_rank_between[i])
+				min_rank = red_rank_between[i];
 		}
 
+		/////перевірка в команді шоб не більше 200 рангів між учасниками red
+		//cout  << endl << " | " << max_rank << " | " << min_rank<< " maxmin" << endl;///////////
+		if (max_rank - min_rank > 200)
+			goto byrank_badteams;
+		/////
 		for (int i = 5;i < 10;i++) {
 			team_blue[i] = vPlayer[rand[i]];
 			blue_rank += Rank[rand[i]];
 			plus_blue_rank[i] = rand[i];
+
+			blue_rank_between[i] = Rank[rand[i]];			
 		}
-		cout << " | " <<red_rank << " | "<< blue_rank << " | "<< endl;
-		if (unsigned(red_rank - blue_rank) > 200)
+		a = 0;
+		for (int i = 5;i < 10;i++) {
+			if (a < 1)
+			{
+				max_rank = blue_rank_between[i];
+				min_rank = blue_rank_between[i];
+				a++;
+			}
+			if (max_rank < blue_rank_between[i])
+				max_rank = blue_rank_between[i];
+			if (min_rank > blue_rank_between[i])
+				min_rank = blue_rank_between[i];
+		}
+
+		
+		
+		//cout << endl <<" | " << max_rank << " | " << min_rank << " maxmin" << endl;
+
+		/////перевірка в команді шоб не більше 200 рангів між учасниками blue
+		if (max_rank-min_rank > 200)
 			goto byrank_badteams;
+		/////перевірка щоб між командами не було більше 100 рангу
+		if ((red_rank - blue_rank) > 100 || (blue_rank - red_rank) > 100)
+	goto byrank_badteams;
 
 		//////////////////////
 		int zero = 0;
@@ -141,57 +206,86 @@ public:
 				red_damage += damage[rand[i]];
 
 			}
-			cout << red_HP << " - HP red damage - " << red_damage << endl;
+			//cout << red_HP << " - HP red damage - " << red_damage << endl;///////
 
 			for (int i = 5;i < 10;i++) {
-				if (zero == 0)
+				if (zero == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
 				blue_HP += HP[rand[i]];
 
 				blue_damage += damage[rand[i]];
 
 			}
-			cout << blue_HP << "  - HP blue damage -" << blue_damage << endl;
+			//cout << blue_HP << "  - HP blue damage -" << blue_damage << endl;//////////////
 			++zero;
-		} while (zero < 2);
+		} while (zero = 0);
 	};
 	
 
-	void winner_team() 
+	void winner_teams() 
 	{
 
 		if (red_HP - blue_damage > blue_HP - blue_damage)
 		{
-			winner = true;
+			winner_team = true;
 		}
 
-		if (winner == true)
+		if (winner_team == true)
 		{
 			cout << endl << "Red team wins" << endl;
+			
 			for (int i = 0;i < 5; i++) {
 				
 				Rank[plus_red_rank[i]] += 25;
+				if (id - 1 == plus_red_rank[i])
+					win = 1;
+				
+				
+			}
+			for (int i = 5;i < 10; i++) {
 
 				Rank[plus_blue_rank[i]] -= 25;
 			}
+			if (win == 1) 
+				cout << "Congratulations! You win!" << endl;
 			
+			else
+				cout << "Sorry but you lose" << endl;
 		}
-		else if (winner == false)
+		else if (winner_team == false)
 		{
 			if (red_HP - blue_damage < blue_HP - blue_damage) {
 				cout << endl << "Blue team wins" << endl;
 				for (int i = 5;i < 10; i++) {
-
+					//cout << plus_blue_rank[i] << " |gg " << endl;///////////
+					//cout << endl << "+25" << endl << Rank[plus_blue_rank[i]] << " | ";/////////////
 					Rank[plus_blue_rank[i]] += 25;
+					//cout << " | " << plus_blue_rank[i] << " | ";///////////////
+					if (id -1== plus_blue_rank[i])
+						win=1;
+				}
+				cout << endl;
+				for (int i = 0;i < 5; i++) {
 
 					Rank[plus_red_rank[i]] -= 25;
+					//cout << endl << "-25" << endl << Rank[plus_red_rank[i]]  << " | ";///////////////
 				}
+				
+				if (win==1)
+					cout << "Congratulations! You win!" << endl;
+				else
+					cout << "Sorry but you lose" << endl;
 			}
 			else 
 				cout << endl << "Friendship is a winner" << endl;
 		}
-		for (int i = 0;i < 10; i++) {
+		cout << endl << "Your rank is " << Rank[id - 1];
+		cout << endl << "Ranks of others participants:";
+		for (int i = 0;i < 5; i++) {
+			cout << endl << vPlayer[plus_red_rank[i]] << ":  "<<Rank[plus_red_rank[i]];
 
-			cout << endl <<Rank[i] << " | ";
+		}
+		for (int i = 5;i < 10; i++) {
+			cout << endl << vPlayer[plus_blue_rank[i]] << ":  " << Rank[plus_blue_rank[i]];
 
 		}
 	}
@@ -208,7 +302,7 @@ public:
 	}*/
 };
 
-class Player_Manager {	
+class Player_Manager : Player{	
 	friend class Hero_Manager;
 public:
 
@@ -240,7 +334,7 @@ public:
 	void get_player_by_id() {
 
 	id:
-		cout << "To start enter your id: ";
+		cout << "Enter  id: ";
 		cin >> id;
 		if (id < 0 || id > vPlayer.size()) {
 			cout << "No such id" << endl;
@@ -300,7 +394,7 @@ public:
 	
 
 
-class Hero_Manager : Hero{
+class Hero_Manager : Hero,Player{
 	friend class Player_Manager;
 public :
 	void ListHeroes() {
@@ -411,10 +505,11 @@ int main() {
 	Player name;
 	Player_Manager get_name;
 	Hero_Manager yourheroes;
-	
+	Session team;
+
 	int a;
 	cout << "!================================================!" << endl << "**********************Gamers**********************" << endl;
-	cout << "To see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add a player - 5" << endl;
+	cout << "To see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add a player - 5\nTo play a game - 7" << endl;
 	cout << "--------------------------------------" << endl;
 
 	cout << "What do you want?\n";
@@ -460,27 +555,19 @@ int main() {
 				break;
 			}
 			
-			break;
 		case 6:
 			name.ListPlayers();
+			break;
+		case 7:
+			team.team_separate();
+			team.winner_teams();
+			break;
 		};
-		
-		
-		
-	
-		
-		Session team;
-		team.team_separate();
-		team.winner_team();
 
-		
 		cout << endl << "--------------------------------------" << endl;
-		cout << "To see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add/remove a player - 5\nTo see all players - 6" << endl;
+		cout << "To see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add/remove a player - 5\nTo see all players - 6\nTo play a game - 7" << endl;
 		cout << "--------------------------------------" << endl;
 	} while (true);
-
-
-
 	
 	return 0;
 }
