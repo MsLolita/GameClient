@@ -4,8 +4,15 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iterator>
 
+// ////////////////////
+// #include "Player.h"
+// #include "Hero.h"
+// #include "Team_Part.h"
+// #include "Session.h"
+// #include "Player_Manager.h"
+// #include "Game_Manager.h"
+// #include "Hero_Manager.h"
 
 using namespace std;
 
@@ -14,7 +21,7 @@ int o = 10;
 string j;
 class Player_Manager;
 
-vector<string>	vPlayer = { "kek", "no", "hub", "glu", "rom", "mel", "nuc", "hyk", "fox", "ten" };
+vector<string>	vPlayer = { "Denys", "Maks", "Anton", "Nazar", "Andrei", "Danya", "Yra", "Vanya", "Andrey", "Losha" };
 
 
 vector <int> Rank = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
@@ -25,7 +32,7 @@ private:
 
 public:
 
-	
+
 
 
 	string Player;
@@ -74,13 +81,13 @@ public:
 
 vector<string> vHero = { "mag", "luchnik", "bomber", "loser", "pitardomen", "luntik", "batman", "poseidon", "programissst", "kekster" };
 
-vector<int> HP = { 110, 120, 125, 90, 95, 70, 250, 100, 90, 130 };
+vector<int> HP = { 120, 120, 125, 90, 95, 70, 250, 100, 90, 130 };
 vector<int> damage = { 12,20,7,16,20,13,20,18,19,10 };
 
 class Hero {
 public:
 
-	
+
 
 	string Hero;
 	int hp;
@@ -89,10 +96,37 @@ public:
 
 };
 
+int plus_red_rank[5];
+int plus_blue_rank[10];
 
 
-class Session : Player, Hero {
+int red_HP, red_damage;
+int  blue_HP, blue_damage;
 
+vector<int> Rand;
+
+class Team_part : Hero {
+	friend class Session;
+private:
+
+public:
+	void random_teams() {
+		Rand.erase(Rand.begin(), Rand.end());
+		for (int i = 0; i < vPlayer.size(); i++) {
+			Rand.push_back(i);
+		}
+		
+
+		srand((time(0)));
+		random_shuffle(Rand.begin(), Rand.end());
+	}
+
+};
+
+
+
+class Session : Team_part, Hero {
+	
 public:
 	string team_red[5];
 	string team_blue[10];
@@ -100,46 +134,33 @@ public:
 	int red_rank;
 	int blue_rank;
 
-	int plus_red_rank[5];
-	int plus_blue_rank[10];
-
-
-	int red_HP, red_damage;
-	int  blue_HP, blue_damage;
-
 	int red_rank_between[5];
 	int blue_rank_between[10];
 
 	int max_rank;
 	int min_rank;
 
-
 	int a, win = 0;
 
 	bool winner_team = 0;
 
-
+	
 	void team_separate() {
+		
+		
 
-		vector<int> rand(vPlayer.size());
 	byrank_badteams:
 
-		for (int i = 0; i < vPlayer.size(); i++) {
-			rand[i] = i;
-		}
+		random_teams();
+
 		win = a = 0;
 		red_rank = blue_rank = 0;
-
-		srand((time(0)));
-		random_shuffle(rand.begin(), rand.end());
-
-
 		for (int i = 0;i < 5; i++) {
-			team_red[i] = vPlayer[rand[i]];
-			red_rank += Rank[rand[i]];
-			plus_red_rank[i] = rand[i];
+			team_red[i] = vPlayer[Rand[i]];
+			red_rank += Rank[Rand[i]];
+			plus_red_rank[i] = Rand[i];
 
-			red_rank_between[i] = Rank[rand[i]];
+			red_rank_between[i] = Rank[Rand[i]];
 		}
 		/////
 
@@ -162,11 +183,11 @@ public:
 			goto byrank_badteams;
 		/////
 		for (int i = 5;i < 10;i++) {
-			team_blue[i] = vPlayer[rand[i]];
-			blue_rank += Rank[rand[i]];
-			plus_blue_rank[i] = rand[i];
+			team_blue[i] = vPlayer[Rand[i]];
+			blue_rank += Rank[Rand[i]];
+			plus_blue_rank[i] = Rand[i];
 
-			blue_rank_between[i] = Rank[rand[i]];
+			blue_rank_between[i] = Rank[Rand[i]];
 		}
 		a = 0;
 		for (int i = 5;i < 10;i++) {
@@ -194,46 +215,44 @@ public:
 			goto byrank_badteams;
 
 		//////////////////////
-		int zero = 0;
+		
+		int times = 0;
 		do {
 			for (int i = 0;i < 5; i++) {
-				if (zero == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
-					red_HP += HP[rand[i]];
+				if (times == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
+					red_HP += HP[Rand[i]];
 
-				red_damage += damage[rand[i]];
+				red_damage += damage[Rand[i]];
 
 			}
 			//cout << red_HP << " - HP red damage - " << red_damage << endl;///////
 
 			for (int i = 5;i < 10;i++) {
-				if (zero == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
-					blue_HP += HP[rand[i]];
+				if (times == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
+					blue_HP += HP[Rand[i]];
 
-				blue_damage += damage[rand[i]];
+				blue_damage += damage[Rand[i]];
 
 			}
 			//cout << blue_HP << "  - HP blue damage -" << blue_damage << endl;//////////////
-			++zero;
-		} while (zero = 0);
+			++times;
+		} while (times = 0);
+
 	};
 
-
+		
 	
 
+
 };
 
-class Team_part : Player, Hero {
 
+
+class Game_Manager :Session {
 public:
 
 
-	/*void teamhero() {
-		vHero[] = ;
-	}*/
-};
 
-class Game_Manager :Session{
-public:
 	void winner_teams()
 	{
 
@@ -311,7 +330,7 @@ public:
 	void get_player_by_name() {
 
 		string j;
-		cout << "Enter a name of player: ";
+		cout << "Enter your name : ";
 		cin >> j;
 		cout << endl;
 
@@ -389,6 +408,7 @@ public:
 
 
 		}
+		id = 1;
 	}
 
 
@@ -511,14 +531,25 @@ int main() {
 	Game_Manager win;
 
 	int a;
-	cout << "Enter your id: ";
-	cin >> id;
+	
+		
 
-	cout << "!================================================!" << endl << "**********************Gamers**********************" << endl;
-	cout << "To see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add a player - 5\nTo play a game - 7" << endl;
+	cout << "!=================================================!" << endl << "**********************Kolokol**********************" << endl;
+	
+	wrong_id:
+		cout << "Enter your id: ";
+		cin >> id;
+		if (id <0 || id >vPlayer.size() ) {
+			cout << "No such id" << endl;
+			goto wrong_id;
+		}
+
+	cout << "\nTo see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add a player - 5\nTo play a game - 7" << endl;
 	cout << "--------------------------------------" << endl;
+	 
 
-	cout << "What do you want?\n";
+
+	cout <<"What do you want, " << vPlayer[id - 1] <<"?\n";
 
 	do {
 
