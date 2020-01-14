@@ -55,14 +55,15 @@ int main() {
 
 	cout << "!=================================================!" << endl << "**********************Kolokol**********************" << endl;
 
-wrong_id:
-	cout << "Enter your id: ";
-	cin >> id;
-	if (id <0 || id >vPlayer.size()) {
+	while (true) {
+		cout << "Enter your id: ";
+		cin >> id;
+		if (id > 0 && id < vPlayer.size()) {
+			break;
+		}
 		cout << "No such id" << endl;
-		goto wrong_id;
+		
 	}
-
 	cout << "\nTo see the statistic - 1\nTo change a name - 2\nTo see your hero - 3\nTo find by name/id - 4\nTo add a player - 5\nTo play a game - 7" << endl;
 	cout << "--------------------------------------" << endl;
 

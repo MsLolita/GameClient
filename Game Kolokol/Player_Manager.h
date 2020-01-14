@@ -22,31 +22,36 @@ public:
 				cout << "Player's nickname is " << vPlayer[i] << endl;
 
 				cout << "Player's rank is " << Rank[i] << endl;
-				goto yesname;
+				break;
 			}
 
-
+			if (i == vPlayer.size())
+			{
+				cout << "No such player" << endl;
+			}
 		}
-		cout << "No such name" << endl;
-	yesname:
+		
 		cout << endl;
 	}
 
 	void get_player_by_id() {
 
-	id:
-		cout << "Enter  id: ";
-		cin >> id;
-		if (id < 0 || id > vPlayer.size()) {
-			cout << "No such id" << endl;
-			goto id;
-		}
-		else {
-			cout << "Player's id is " << id << endl;
+		while (true) {
+			cout << "Enter  id: ";
+			cin >> id;
+			if (id > 0 && id <= vPlayer.size()) {
+				
+				cout << "Player's id is " << id << endl;
 
-			cout << "Player's nickname is " << vPlayer[id - 1] << endl;
+				cout << "Player's nickname is " << vPlayer[id - 1] << endl;
 
-			cout << "Player's rank is " << Rank[id - 1] << endl;
+				cout << "Player's rank is " << Rank[id - 1] << endl;
+
+				break;
+			}
+			else {
+				cout << "No such id" << endl;
+			}
 		}
 	}
 
@@ -71,22 +76,18 @@ public:
 
 	void remove_player() {
 
-	wrongid:
+		while (true) {
 
-		cout << "Enter id of player: ";
+			cout << "Enter id of player: ";
 
-		cin >> id;
-
-
-
-		if (id > vPlayer.size() || id < 0) {
-			cout << "\nWrong id\n";
-			goto wrongid;
-		}
-		else {
-			vPlayer.erase(vPlayer.begin() + id - 1);
-
-
+			cin >> id;
+			if (id <= vPlayer.size() && id > 0) {
+				vPlayer.erase(vPlayer.begin() + id - 1);
+				break;
+			}
+			else {
+				cout << "\nWrong id\n";
+			}
 		}
 		id = 1;
 	}

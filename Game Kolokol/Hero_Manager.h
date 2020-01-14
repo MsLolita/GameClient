@@ -34,7 +34,7 @@ public:
 		cin >> j;
 		cout << endl;
 
-		for (int i = 0; i <= vPlayer.size(); i++) {
+		for (int i = 0; i <= vHero.size(); i++) {
 
 			if (vHero[i] == j) {
 				cout << "Heroe's id is " << i + 1 << endl;
@@ -42,12 +42,16 @@ public:
 				cout << "Heroe's name is " << vHero[i] << endl;
 
 				cout << "Heroe's rank is " << Rank[i] << endl;
-				goto yeshero;
-			}
 
+				break;
+			}
+			if (i == vHero.size())
+			{
+				cout << "No such hero" << endl;
+			}
 		}
-		cout << "No such hero" << endl;
-	yeshero:
+		
+	
 		cout << endl;
 	}
 

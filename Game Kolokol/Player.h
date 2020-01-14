@@ -30,23 +30,26 @@ public:
 
 	}
 
-	char iff;
+	string iff;
 
 	void changename() {
-	again:
-		cout << "Do you really want to change nickname?(Put N(NO) or Y(Yes))" << endl;
-		cin >> iff;
-		if ((iff == 'Y') || (iff == 'y')) {
-			cout << "Enter your new nickname: ";
-			cin >> vPlayer[id - 1];
-			cout << "Your nickname is " << vPlayer[id - 1] << endl;
-		}
-		else if ((iff == 'N') || (iff == 'n')) {
-			cout << "Your nickname is " << vPlayer[id - 1] << endl;
-		}
-		else {
-			cout << "You write wrong(Only N(NO) or Y(Yes))" << endl;
-			goto again;
+		while (true) {
+			cout << "Do you really want to change nickname?(Put N(NO) or Y(Yes))" << endl;
+			cin >> iff;
+			if ((iff == "Y") || (iff == "y")) {
+				cout << "Enter your new nickname: ";
+				cin >> vPlayer[id - 1];
+				cout << "Your nickname is " << vPlayer[id - 1] << endl;
+				break;
+			}
+			else if ((iff == "N") || (iff == "n")) {
+				cout << "Your nickname is " << vPlayer[id - 1] << endl;
+				break;
+			}
+			else {
+				cout << "You write wrong(Only N(NO) or Y(Yes))" << endl;
+				
+			}
 		}
 	};
 

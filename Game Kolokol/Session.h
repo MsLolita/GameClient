@@ -26,79 +26,77 @@ public:
 
 	void team_separate() {
 
+		while (true) {
 
+			random_teams();
 
-	byrank_badteams:
+			win = a = 0;
+			red_rank = blue_rank = 0;
+			for (int i = 0;i < 5; i++) {
+				team_red[i] = vPlayer[Rand[i]];
+				red_rank += Rank[Rand[i]];
+				plus_red_rank[i] = Rand[i];
 
-		random_teams();
-
-		win = a = 0;
-		red_rank = blue_rank = 0;
-		for (int i = 0;i < 5; i++) {
-			team_red[i] = vPlayer[Rand[i]];
-			red_rank += Rank[Rand[i]];
-			plus_red_rank[i] = Rand[i];
-
-			red_rank_between[i] = Rank[Rand[i]];
-		}
-		/////
-
-		for (int i = 0;i < 5; i++) {
-			if (a < 1)
-			{
-				max_rank = red_rank_between[i];
-				min_rank = red_rank_between[i];
-				a++;
+				red_rank_between[i] = Rank[Rand[i]];
 			}
-			if (max_rank < red_rank_between[i])
-				max_rank = red_rank_between[i];
-			if (min_rank > red_rank_between[i])
-				min_rank = red_rank_between[i];
-		}
+			/////
 
-		/////перевірка в команді шоб не більше 200 рангів між учасниками red
-		//cout  << endl << " | " << max_rank << " | " << min_rank<< " maxmin" << endl;///////////
-		if (max_rank - min_rank > 200)
-			goto byrank_badteams;
-		/////
-		for (int i = 5;i < 10;i++) {
-			team_blue[i] = vPlayer[Rand[i]];
-			blue_rank += Rank[Rand[i]];
-			plus_blue_rank[i] = Rand[i];
-
-			blue_rank_between[i] = Rank[Rand[i]];
-		}
-		a = 0;
-		for (int i = 5;i < 10;i++) {
-			if (a < 1)
-			{
-				max_rank = blue_rank_between[i];
-				min_rank = blue_rank_between[i];
-				a++;
+			for (int i = 0;i < 5; i++) {
+				if (a < 1)
+				{
+					max_rank = red_rank_between[i];
+					min_rank = red_rank_between[i];
+					a++;
+				}
+				if (max_rank < red_rank_between[i])
+					max_rank = red_rank_between[i];
+				if (min_rank > red_rank_between[i])
+					min_rank = red_rank_between[i];
 			}
-			if (max_rank < blue_rank_between[i])
-				max_rank = blue_rank_between[i];
-			if (min_rank > blue_rank_between[i])
-				min_rank = blue_rank_between[i];
+
+
+			//cout  << endl << " | " << max_rank << " | " << min_rank<< " maxmin" << endl;///////////
+			if (max_rank - min_rank < 200)
+				break;
+			/////
+			for (int i = 5;i < 10;i++) {
+				team_blue[i] = vPlayer[Rand[i]];
+				blue_rank += Rank[Rand[i]];
+				plus_blue_rank[i] = Rand[i];
+
+				blue_rank_between[i] = Rank[Rand[i]];
+			}
+			a = 0;
+			for (int i = 5;i < 10;i++) {
+				if (a < 1)
+				{
+					max_rank = blue_rank_between[i];
+					min_rank = blue_rank_between[i];
+					a++;
+				}
+				if (max_rank < blue_rank_between[i])
+					max_rank = blue_rank_between[i];
+				if (min_rank > blue_rank_between[i])
+					min_rank = blue_rank_between[i];
+			}
+
+
+
+			//cout << endl <<" | " << max_rank << " | " << min_rank << " maxmin" << endl;
+
+
+			if (max_rank - min_rank < 200)
+				break;
+
+			if ((red_rank - blue_rank) < 100 || (blue_rank - red_rank) < 100)
+				break;
+
+			//////////////////////
 		}
-
-
-
-		//cout << endl <<" | " << max_rank << " | " << min_rank << " maxmin" << endl;
-
-		/////перевірка в команді шоб не більше 200 рангів між учасниками blue
-		if (max_rank - min_rank > 200)
-			goto byrank_badteams;
-		/////перевірка щоб між командами не було більше 100 рангу
-		if ((red_rank - blue_rank) > 100 || (blue_rank - red_rank) > 100)
-			goto byrank_badteams;
-
-		//////////////////////
-
 		int times = 0;
 		do {
 			for (int i = 0;i < 5; i++) {
-				if (times == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
+				if (times == 0)						
 					red_HP += HP[Rand[i]];
 
 				red_damage += damage[Rand[i]];
@@ -107,7 +105,7 @@ public:
 			//cout << red_HP << " - HP red damage - " << red_damage << endl;///////
 
 			for (int i = 5;i < 10;i++) {
-				if (times == 0)						// щоб при повторному ударі не добавлялося здоровя а тільки урон 
+				if (times == 0)						
 					blue_HP += HP[Rand[i]];
 
 				blue_damage += damage[Rand[i]];
